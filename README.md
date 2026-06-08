@@ -1,44 +1,39 @@
-# 🍵 Matcha Club - Predictive Cloud API
+# 🍵 Matcha Club - Cloud AI Predictor
 
-Microservicio de Inteligencia Artificial desplegado en la nube para predecir la demanda operativa y emitir recomendaciones de gestión para el Matcha Club. 
+Microservicio de Inteligencia Artificial Full-Stack desplegado en la nube para predecir la demanda operativa y emitir recomendaciones de gestión para el Matcha Club. 
 
-Este proyecto implementa un modelo de Machine Learning (XGBoost) a través de una API RESTful, diseñado bajo una arquitectura tolerante a fallos con contenedores y pipelines de despliegue continuo (CI/CD).
+Este proyecto evoluciona de una API RESTful tradicional a una solución web interactiva, respaldada por un modelo predictivo de Machine Learning (XGBoost) y operando sobre una arquitectura Cloud Native tolerante a fallos.
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ Arquitectura del Sistema (Cloud Native)
 
-El sistema fue diseñado cumpliendo con los estándares de **Cloud Native** y automatización de infraestructura:
+El despliegue está diseñado bajo estrictos estándares de la industria, garantizando alta disponibilidad y actualizaciones continuas sin tiempo de inactividad (Rolling Updates):
 
-* **Pilar 1 - Contenedores y Orquestación:** La API está empaquetada en una imagen Docker optimizada (Multi-stage build) y orquestada mediante **Kubernetes (K3s)** en una instancia EC2 de AWS, garantizando alta disponibilidad a través de réplicas de pods y balanceo de carga.
-* **Pilar 3 - Integración y Despliegue Continuo (CI/CD):** Pipeline automatizado con **GitHub Actions**. Ante cada cambio en la rama principal, el entorno en la nube ejecuta pruebas unitarias estrictas (`pytest`), construye la nueva imagen y la actualiza en el registro de Docker Hub sin intervención manual.
+* **Capa de Infraestructura (AWS):** Aprovisionamiento sobre una instancia EC2 (`t3.medium`) operando como servidor dedicado.
+* **Orquestación (Kubernetes):** Uso de **K3s** para gestionar el balanceo de carga (`LoadBalancer`) y mantener múltiples réplicas activas de los contenedores para prevenir caídas del servicio.
+* **CI/CD Automatizado:** Pipeline integrado con **GitHub Actions** que ejecuta pruebas unitarias automatizadas (`pytest`), construye una imagen Docker optimizada (Multi-stage) y actualiza de forma invisible el registro en Docker Hub ante cada nuevo cambio en el código.
 
 ## 🛠️ Stack Tecnológico
 
-* **Machine Learning:** Python, XGBoost, Pandas, Scikit-Learn.
-* **Backend:** FastAPI, Uvicorn.
-* **DevOps & Cloud:** Docker, Kubernetes (K3s), GitHub Actions, AWS (EC2).
+* **Machine Learning:** Python 3.10, XGBoost, Pandas, Scikit-Learn.
+* **Backend y Web:** FastAPI, Uvicorn, Pydantic, HTML5, Vanilla JavaScript.
+* **DevOps y Nube:** Docker, Kubernetes (K3s), GitHub Actions, AWS EC2.
 
-## 🚀 Uso de la API (Endpoints)
+## 📁 Estructura del Repositorio
 
-La API expone una interfaz interactiva Swagger UI para realizar predicciones en tiempo real.
+* `main.py`: Cerebro del backend (FastAPI) y enrutador web.
+* `index.html`: Interfaz gráfica (Frontend) responsiva para la interacción comercial.
+* `modelo_xgb.pkl`: Modelo matemático pre-entrenado.
+* `Dockerfile`: Receta estricta para empaquetar el código, dependencias y archivos estáticos.
+* `api-deployment.yaml`: Planos (Manifests) declarativos para levantar la infraestructura en Kubernetes.
+* `.github/workflows/ci-cd.yml`: Instrucciones de automatización para el robot de integración continua.
 
-**Endpoint Principal:** `POST /predecir`
+## 🚀 Acceso y Uso
 
-**Payload de ejemplo (JSON):**
-{
-  "dia_semana_num": 1,
-  "es_fin_semana": 0,
-  "temperatura_max": 20.0
-}
+El clúster expone la aplicación unificando la vista comercial y la técnica en el mismo puerto:
 
-**Respuesta de ejemplo:**
-{
-  "cluster_matematico": 2,
-  "recomendacion_operativa": "Día Regular (Base) - Operación normal"
-}
+1. **Interfaz Comercial:** Accediendo a la ruta principal (`http://<IP_PUBLICA>:8000/`), el sistema sirve el cliente web interactivo para que el personal del establecimiento obtenga predicciones de demanda basadas en el clima.
+2. **Documentación Técnica:** Accediendo a `/docs` (`http://<IP_PUBLICA>:8000/docs`), se levanta la consola interactiva Swagger UI / OpenAPI para la integración formal de la API con otros sistemas.
 
-## 🧪 Ejecución de Pruebas Locales
+## 🛡️ Estándares de Seguridad
 
-Para ejecutar la batería de pruebas unitarias que validan la integridad del modelo y las respuestas del servidor:
-
-1. Instalar dependencias de desarrollo: `pip install pytest httpx`
-2. Ejecutar el entorno de pruebas: `python -m pytest`
+Aplicando el principio de **Zero Trust**, este repositorio cumple con normativas de seguridad en la nube al no exponer claves privadas en el código fuente (Hardcoding). Las credenciales críticas para el pipeline de distribución se inyectan dinámicamente mediante **GitHub Secrets**, protegiendo la integridad de la infraestructura de AWS y Docker Hub.

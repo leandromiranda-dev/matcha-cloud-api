@@ -37,3 +37,13 @@ El clúster expone la aplicación unificando la vista comercial y la técnica en
 ## 🛡️ Estándares de Seguridad
 
 Aplicando el principio de **Zero Trust**, este repositorio cumple con normativas de seguridad en la nube al no exponer claves privadas en el código fuente (Hardcoding). Las credenciales críticas para el pipeline de distribución se inyectan dinámicamente mediante **GitHub Secrets**, protegiendo la integridad de la infraestructura de AWS y Docker Hub.
+
+## 💻 Ejecución Local
+
+Para probar o modificar el proyecto en un entorno local, puedes optar por dos métodos de ejecución:
+**Modo Simulador**
+Recomendado para validar la arquitectura del contenedor antes de ejecutar el pipeline de CI/CD hacia producción.
+
+1. Construir la imagen localmente ejecutando `docker build -t matcha-local .`
+2. Levantar el contenedor enlazando los puertos con `docker run -p 8000:8000 matcha-local`
+3. Acceder en el navegador a `http://localhost:8000`

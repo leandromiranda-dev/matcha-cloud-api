@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+from fastapi.responses import FileResponse
 
 # Inicializamos la aplicación FastAPI
 app = FastAPI(
@@ -20,8 +21,8 @@ class DatosClima(BaseModel):
     temperatura_max: float   # Grados centígrados (ej. 35.5)
 
 @app.get("/")
-def health_check():
-    return {"estado": "ok", "mensaje": "API del Matcha Club funcionando correctamente."}
+def read_root():
+    return FileResponse("index.html")
 
 @app.post("/predecir")
 def predecir_demanda(datos: DatosClima):

@@ -4,12 +4,11 @@ from main import app
 # Creamos un cliente de prueba que simulará peticiones a tu API sin necesidad de encender el servidor
 client = TestClient(app)
 
-# PRUEBA 1: Verificar que el servidor responde (Health Check)
+# PRUEBA 1: Verificar que la interfaz web responde
 def test_health_check():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"estado": "ok", "mensaje": "API del Matcha Club funcionando correctamente."}
-
+    assert "text/html" in response.headers["content-type"]
 # PRUEBA 2: Verificar predicción con clima normal (Validación de estructura de respuesta)
 def test_prediccion_dia_normal():
     payload = {

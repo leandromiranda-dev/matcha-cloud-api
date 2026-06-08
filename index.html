@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matcha Club | Inteligencia Operativa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4fdf4;
+            color: #2d6a4f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(45, 106, 79, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #b7e4c7;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #40916c;
+            box-shadow: 0 0 5px rgba(64, 145, 108, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #1b4332;
+        }
+
+        #resultado {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #d8f3dc;
+            border: 1px solid #b7e4c7;
+            display: none;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>🍵 Matcha Club Predictor</h1>
+
+        <div class="form-group">
+            <label for="dia">Día de la semana:</label>
+            <select id="dia">
+                <option value="0">Lunes</option>
+                <option value="1">Martes</option>
+                <option value="2">Miércoles</option>
+                <option value="3">Jueves</option>
+                <option value="4">Viernes</option>
+                <option value="5">Sábado</option>
+                <option value="6">Domingo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fin_semana">¿Es fin de semana?</label>
+            <select id="fin_semana">
+                <option value="0">No (Día hábil)</option>
+                <option value="1">Sí (Sábado/Domingo)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="temp">Temperatura Máxima Esperada (°C):</label>
+            <input type="number" id="temp" step="0.1" placeholder="Ej: 32.5">
+        </div>
+
+        <button onclick="consultarIA()">Generar Predicción Operativa</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        async function consultarIA() {
+            const tempValue = document.getElementById('temp').value;
+            if (!tempValue) {
+                alert("Por favor ingresa la temperatura.");
+                return;
+            }
+
+            const payload = {
+                dia_semana_num: parseInt(document.getElementById('dia').value),
+                es_fin_semana: parseInt(document.getElementById('fin_semana').value),
+                temperatura_max: parseFloat(tempValue)
+            };
+
+            try {
+                // Hacemos la petición a tu propio backend en la misma IP
+                const response = await fetch('/predecir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                const resDiv = document.getElementById('resultado');
+                resDiv.style.display = 'block';
+                resDiv.innerHTML = `<strong>📡 Cluster Identificado:</strong> ${data.cluster_matematico} <br><br> <strong>🎯 Recomendación:</strong><br>${data.recomendacion_operativa}`;
+            } catch (error) {
+                alert("Error al conectar con el modelo de IA.");
+            }
+        }
+    </script>
+</body>
+
+</html>

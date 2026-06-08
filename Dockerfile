@@ -29,6 +29,7 @@ RUN pip install --no-cache /wheels/*
 # Copiamos el servidor y el cerebro de la IA
 COPY main.py .
 COPY modelo_xgb.pkl .
+COPY index.html .
 
 # Abrimos el puerto que usará FastAPI
 EXPOSE 8000

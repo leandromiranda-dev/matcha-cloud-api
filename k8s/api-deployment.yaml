@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matcha-api-deployment
+  labels:
+    app: matcha-api
+spec:
+  replicas: 2 # Kubernetes mantendrá 2 copias de tu API funcionando para alta disponibilidad
+  selector:
+    matchLabels:
+      app: matcha-api
+  template:
+    metadata:
+      labels:
+        app: matcha-api
+    spec:
+      containers:
+      - name: matcha-api-container
+        # Aquí pondremos tu usuario de Docker Hub una vez que la subamos
+        image: leandro20006/matcha-api:v1 
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matcha-api-service
+spec:
+  type: LoadBalancer # Esto le pedirá a AWS que nos dé una IP pública de internet
+  selector:
+    app: matcha-api
+  ports:
+    - protocol: TCP
+      port: 80 # El puerto público normal de internet
+      targetPort: 8000 # El puerto interno de nuestro contenedor
